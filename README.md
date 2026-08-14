@@ -7,7 +7,11 @@ Projeto de análise exploratória de dados (EDA) e desenvolvimento de um dashboa
 Este projeto tem como objetivo analisar um conjunto de dados com informações sobre anúncios de veículos usados e identificar padrões relacionados a preço, características dos veículos e tempo de permanência dos anúncios.
 
 A análise foi realizada utilizando Python e bibliotecas de análise e visualização de dados. Após o tratamento e a exploração dos dados, foi desenvolvido um dashboard interativo utilizando Streamlit.
+##  Dashboard
 
+O dashboard interativo está disponível no Render:
+
+ [Acessar o Vehicle Dashboard](https://vehicle-dashboard-ms5y.onrender.com)
 # Dataset
 
 O dataset contém **51.525 anúncios de veículos usados** e **13 variáveis**, incluindo:
