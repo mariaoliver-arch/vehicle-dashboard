@@ -2,14 +2,13 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# Configuração da página
 st.set_page_config(
     page_title="Vehicle Dashboard",
     page_icon="🚗",
     layout="wide"
 )
 
-# Carregar os dados
+# Carregar os dados tratados
 car_data = pd.read_csv("vehicles_us_clean.csv")
 
 # Título
@@ -22,24 +21,14 @@ st.subheader("Visão geral dos dados")
 col1, col2, col3 = st.columns(3)
 
 with col1:
-    st.metric(
-        "Total de veículos",
-        f"{len(car_data):,}"
-    )
+    st.metric("Total de veículos", f"{len(car_data):,}")
 
 with col2:
-    st.metric(
-        "Preço médio",
-        f"${car_data['price'].mean():,.0f}"
-    )
+    st.metric("Preço médio", f"${car_data['price'].mean():,.0f}")
 
 with col3:
-    st.metric(
-        "Ano médio",
-        f"{car_data['model_year'].mean():.0f}"
-    )
+    st.metric("Ano médio", f"{car_data['model_year'].mean():.0f}")
 
-# Linha divisória
 st.divider()
 
 # Filtros
@@ -68,7 +57,6 @@ with col3:
         default=sorted(car_data["fuel"].unique())
     )
 
-# Aplicar filtros
 filtered_data = car_data[
     car_data["condition"].isin(condition_selected)
     & car_data["type"].isin(type_selected)
@@ -79,23 +67,28 @@ st.write(
     f"**{len(filtered_data):,} veículos** correspondem aos filtros selecionados."
 )
 
-# Gráfico 1 - Distribuição dos preços
+# 1. Histograma controlado por botão
 st.subheader("Distribuição dos preços")
 
-fig_price = px.histogram(
-    filtered_data,
-    x="price",
-    nbins=50,
-    title="Distribuição dos preços dos veículos",
-    labels={
-        "price": "Price",
-        "count": "Quantidade de veículos"
-    }
-)
+if st.button("Construir histograma", key="build_price_histogram"):
+    fig_price = px.histogram(
+        filtered_data,
+        x="price",
+        nbins=50,
+        title="Distribuição dos preços dos veículos",
+        labels={
+            "price": "Price",
+            "count": "Quantidade de veículos"
+        }
+    )
 
-st.plotly_chart(fig_price, use_container_width=True)
+    st.plotly_chart(
+        fig_price,
+        use_container_width=True,
+        key="price_histogram"
+    )
 
-# Gráfico 2 - Ano do modelo x preço
+# 2. Ano do modelo x preço
 st.subheader("Relação entre ano do modelo e preço")
 
 fig_year = px.scatter(
@@ -109,9 +102,13 @@ fig_year = px.scatter(
     }
 )
 
-st.plotly_chart(fig_year, use_container_width=True)
+st.plotly_chart(
+    fig_year,
+    use_container_width=True,
+    key="model_year_price_scatter"
+)
 
-# Gráfico 3 - Quilometragem x preço
+# 3. Quilometragem x preço
 st.subheader("Relação entre quilometragem e preço")
 
 fig_odometer = px.scatter(
@@ -125,9 +122,13 @@ fig_odometer = px.scatter(
     }
 )
 
-st.plotly_chart(fig_odometer, use_container_width=True)
+st.plotly_chart(
+    fig_odometer,
+    use_container_width=True,
+    key="odometer_price_scatter"
+)
 
-# Gráfico 4 - Preço por condição
+# 4. Preço por condição
 st.subheader("Distribuição dos preços por condição do veículo")
 
 fig_condition = px.box(
@@ -141,9 +142,13 @@ fig_condition = px.box(
     }
 )
 
-st.plotly_chart(fig_condition, use_container_width=True)
+st.plotly_chart(
+    fig_condition,
+    use_container_width=True,
+    key="condition_price_box"
+)
 
-# Gráfico 5 - Preço por tipo
+# 5. Preço por tipo
 st.subheader("Distribuição dos preços por tipo de veículo")
 
 fig_type = px.box(
@@ -157,9 +162,13 @@ fig_type = px.box(
     }
 )
 
-st.plotly_chart(fig_type, use_container_width=True)
+st.plotly_chart(
+    fig_type,
+    use_container_width=True,
+    key="type_price_box"
+)
 
-# Gráfico 6 - Preço por combustível
+# 6. Preço por combustível
 st.subheader("Distribuição dos preços por tipo de combustível")
 
 fig_fuel = px.box(
@@ -173,4 +182,8 @@ fig_fuel = px.box(
     }
 )
 
-st.plotly_chart(fig_fuel, use_container_width=True)
+st.plotly_chart(
+    fig_fuel,
+    use_container_width=True,
+    key="fuel_price_box"
+)
